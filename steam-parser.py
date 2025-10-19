@@ -13,6 +13,7 @@ def parse_price(price_str):
                        .replace(u'\xa0', '') \
                        .strip()
     cleaned = re.sub(r'[^0-9\.-]', '', cleaned)
+    #this can cause compile issues due to regex complexity
     try:
         return float(cleaned)
     except:
@@ -34,6 +35,7 @@ with sync_playwright() as p:
 
     games = []
     for game in game_containers:
+        #too complex, suggest do it as several func with amount of calls
         try:
             title_el = game.query_selector("div._2ekpT6PjwtcFaT4jLQehUK.StoreSaleWidgetTitle")
             title = title_el.inner_text().strip() if title_el else "N/A"
@@ -77,7 +79,7 @@ with sync_playwright() as p:
         except Exception as e:
             print(f"Error parsing game: {e}")
             continue
-
+#why using lambda exsp here?
     games.sort(key=lambda g: g["Discount %"], reverse=True)
 
     df = pd.DataFrame(games)
